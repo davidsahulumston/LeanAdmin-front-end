@@ -1,0 +1,41 @@
+.width-btn {
+    width: 10em;
+    height: 3.3em;
+}
+
+.btn-space {
+   padding-top: .5em;
+}
+
+.btn-add {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.project-text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.input-size {
+    width: 100%;
+}
+
+.searchInput {
+    height: 4em;
+    padding-left: 1.5em;
+}
+
+.companyImage{
+    width: 30px !important;
+	height: 30px !important;
+	border-radius: 50%;
+}
+
+.endLine {
+    display: flex;
+    justify-content: flex-end;
+
+}

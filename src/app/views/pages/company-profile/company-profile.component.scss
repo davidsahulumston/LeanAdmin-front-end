@@ -1,0 +1,46 @@
+.icon-color {
+	color: #6020DE;
+	font-size: 1.2em;
+	font-weight: bolder !important;
+	cursor: pointer;
+}
+
+.btn-edit {
+	display: flex !important;
+	justify-content: flex-end !important;
+}
+
+.img-profile {
+	display: flex !important;
+	padding: 1em;
+}
+
+.profile-text {
+	color: #6020DE;
+	padding-top: 1.2em;
+	padding-right: 1em;
+	font-weight: bolder;
+	font-size: 20px;
+}
+
+.size-img {
+	width: 8em;
+	height: 8em;
+}
+
+.btn-slide {
+	display: flex;
+	justify-content: flex-end !important;
+}
+
+.clientImage{
+    width: 140px !important;
+	height: 140px !important;
+	border-radius: 10%;
+}
+
+
+.clientText { 
+	display: flex;
+	align-items: center;
+}

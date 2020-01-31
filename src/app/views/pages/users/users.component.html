@@ -1,0 +1,306 @@
+<div class="container">
+	<mat-tab-group>
+		<mat-tab label="Usuarios">
+			<div class="row">
+				<div class="col-4">
+					<form class="example-form">
+						<mat-form-field
+							class="example-full-width"
+							appearance="outline"
+						>
+							<input
+								type="text"
+								placeholder="Buscar"
+								aria-label="Number"
+								matInput
+								[formControl]="myControl"
+								[matAutocomplete]="auto"
+								[(ngModel)]="searchText"
+							/>
+							<mat-icon matSuffix>search</mat-icon>
+							<mat-autocomplete #auto="matAutocomplete">
+								<mat-option
+									*ngFor="
+										let option of filteredOptions | async
+									"
+									[value]="option"
+								>
+									{{ option }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</form>
+				</div>
+				<div class="col btn-user">
+					<button
+						type="button"
+						class="btn btn-outline-primary width-btn"
+						(click)="createUser()"
+					>
+						<a>Agregar usuario</a>
+					</button>
+				</div>
+			</div>
+			<mat-card>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Nombre</th>
+							<th scope="col">Empresa</th>
+							<th scope="col">Sueldo mensual</th>
+							<th scope="col">Permisos</th>
+							<th scope="col">Puesto</th>
+							<th scope="col">Incorporación</th>
+							<th scope="col">Lider</th>
+							<th scope="col">Vacaciones</th>
+							<th scope="col">Acciones</th>
+						</tr>
+					</thead>
+					<tbody
+						*ngFor="
+							let user of usersArray
+								| paginate
+									: { itemsPerPage: 10, currentPage: p }
+								| grdFilter: { user: searchText };
+							let i = index
+						"
+					>
+						<tr>
+							<span *ngFor="let x of user.personalData.documents" (click)="userProfile(i)">
+								<td *ngIf="x.URLfileProfileImage"><img src={{x.URLfileProfileImage}}
+									class="user-image"style="cursor: pointer;"> {{ user.personalData.name }}
+								</td>
+							</span>
+								<!-- <td (click)="userProfile(i)">
+									<img
+										class="user-image"
+										src="{{ arrayImages[i] }}"
+										alt="user_image"
+									/>
+									{{ user.personalData.name }}
+								</td> -->
+							<td>{{ user.positionData.company }}</td>
+							<td>${{ actualSalary[i].salary }}</td>
+							<td>{{ user.permissions }}</td>
+							<td>{{ user.positionData.position }}</td>
+							<td>{{ this.dateInc }}</td>
+							<span *ngIf="user.positionData.lead.personalData">
+								<td>{{ user.positionData.lead.personalData.name }}</td>
+							</span>
+							<span *ngIf="!user.positionData.lead.personalData">
+								<td></td>
+							</span>
+							<td>{{ user.vacations }}</td>
+
+							<td>
+								<div class="row">
+									<div class="col">
+										<i
+											data-toggle="tooltip"
+											data-placement="top"
+											title="Agregar vacaciones"
+											class="fas fa-plus icon-plus"
+											(click)="openDialogVacations()"
+										></i>
+									</div>
+									<div class="col">
+										<i (click)="editUser(i)" class="far fa-edit icon-color"></i>
+									</div>
+									<div class="col">
+										<i
+										(click) = "deleteUser(i)"
+											class="far fa-trash-alt icon-color"
+										></i>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</mat-card>
+			<br />
+			<pagination-controls
+				class="my-pagination"
+				(pageChange)="p = $event"
+				previousLabel="Anterior"
+				nextLabel="Siguiente"
+			></pagination-controls>
+		</mat-tab>
+		<!-- Second content -->
+		<mat-tab label="Puestos">
+			<div class="row">
+				<div class="col-4">
+					<form class="example-form">
+						<mat-form-field
+							class="example-full-width"
+							appearance="outline"
+						>
+							<input
+								type="text"
+								placeholder="Buscar"
+								aria-label="Number"
+								matInput
+								[formControl]="myControl"
+								[matAutocomplete]="auto"
+								[(ngModel)]="searchText"
+							/>
+							<mat-icon matSuffix>search</mat-icon>
+							<mat-autocomplete #auto="matAutocomplete">
+								<mat-option
+									*ngFor="
+										let option of filteredOptions | async
+									"
+									[value]="option"
+								>
+									{{ option }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</form>
+				</div>
+				<div class="col btn-user">
+					<button
+						type="button"
+						class="btn btn-outline-primary width-btn"
+						(click)="openDialog()"
+					>
+						<a>Agregar puesto</a>
+					</button>
+				</div>
+			</div>
+			<mat-card>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Nombre</th>
+							<th scope="col">Acciones</th>
+						</tr>
+					</thead>
+					<tbody
+						*ngFor="
+							let job of jobsArray
+								| paginate
+									: { itemsPerPage: 10, currentPage: p }
+								| grdFilter: { name: searchText };
+							let i = index
+						"
+					>
+						<tr>
+							<td>{{ job.name }}</td>
+							<td>
+								<div class="row">
+									<div class="col-2">
+										<i class="far fa-edit icon-color"></i>
+									</div>
+									<div class="col-2">
+										<i
+											(click)="deletePosition(i)"
+											class="far fa-trash-alt icon-color"
+										></i>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<!-- <pagination-controls (pageChange)="p = $event"></pagination-controls> -->
+			</mat-card>
+			<br />
+			<pagination-controls
+				class="my-pagination"
+				(pageChange)="p = $event"
+				previousLabel="Anterior"
+				nextLabel="Siguiente"
+			></pagination-controls>
+		</mat-tab>
+		<!-- Third content -->
+
+		<mat-tab label="Roles">
+			<div class="row">
+				<div class="col-4">
+					<form class="example-form">
+						<mat-form-field
+							class="example-full-width"
+							appearance="outline"
+						>
+							<input
+								type="text"
+								placeholder="Buscar"
+								aria-label="Number"
+								matInput
+								[formControl]="myControl"
+								[matAutocomplete]="auto"
+								[(ngModel)]="searchText"
+							/>
+							<mat-icon matSuffix>search</mat-icon>
+							<mat-autocomplete #auto="matAutocomplete">
+								<mat-option
+									*ngFor="
+										let option of filteredOptions | async
+									"
+									[value]="option"
+								>
+									{{ option }}
+								</mat-option>
+							</mat-autocomplete>
+						</mat-form-field>
+					</form>
+				</div>
+				<div class="col btn-user">
+					<button
+						type="button"
+						class="btn btn-outline-primary width-btn"
+						(click)="openDialogRol()"
+					>
+						<a>Agregar rol</a>
+					</button>
+				</div>
+			</div>
+			<mat-card>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Nombre</th>
+							<th scope="col">Costo por hora</th>
+							<th scope="col">Acciones</th>
+						</tr>
+					</thead>
+					<tbody
+						*ngFor="
+							let rol of rolsArray
+								| paginate
+									: { itemsPerPage: 10, currentPage: p }
+								| grdFilter: { name: searchText };
+							let i = index
+						"
+					>
+						<tr>
+							<td>{{ rol.name }}</td>
+							<td>${{ rol.costHour }}</td>
+							<td>
+								<div class="row">
+									<div class="col-2">
+										<i class="far fa-edit icon-color"></i>
+									</div>
+									<div class="col-2">
+										<i
+											(click)="deleteRole(i)"
+											class="far fa-trash-alt icon-color"
+										></i>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</mat-card>
+			<br />
+			<pagination-controls
+				class="my-pagination"
+				(pageChange)="p = $event"
+				previousLabel="Anterior"
+				nextLabel="Siguiente"
+			></pagination-controls>
+		</mat-tab>
+	</mat-tab-group>
+</div>

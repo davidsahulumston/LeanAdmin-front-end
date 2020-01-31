@@ -1,0 +1,224 @@
+<div class="container">
+	<div class="text-align">Cliente/Agregar cliente</div>
+
+	<div class="row">
+		<div class="col" (idEvent)="this.reciveId($event)">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				(click)="goBack()"
+			>
+				<a>Regresar</a>
+			</button>
+		</div>
+		<div class="col">
+			<div>Nuevo contacto | Ingrese los datos de contacto y envie</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+
+		<div class="col btn-add">
+			<span *ngIf="isEdit">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="changeClient()"
+				>
+					<a>Editar</a>
+				</button>
+			</span>
+			<span *ngIf="!isEdit">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="createClient()"
+				>
+					<a>Agregar</a>
+				</button>
+			</span>
+		</div>
+	</div>
+	<br />
+
+	<mat-card>
+		<div class="container">
+			<div>
+				Detalles del cliente
+			</div>
+			<br /><br />
+			<div class="row">
+				<div class="col">
+					Logo
+				</div>
+
+				<div class="col">
+					<mat-form-field appearance="outline" class="input-size">
+						<span *ngIf="isEdit">
+							<mat-label>Cambiar logo</mat-label>
+						</span>
+
+						<ngx-mat-file-input
+							accept="image/*"
+							#removableInput
+							formControlName="outline"
+							placeholder="Basic outline placeholder"
+							(change)="file($event)"
+						></ngx-mat-file-input>
+
+						<mat-icon
+							matSuffix
+							*ngIf="!removableInput.empty"
+							(click)="removableInput.clear($event)"
+							(click)="deleteFile($event)"
+							>clear</mat-icon
+						>
+
+						<mat-icon matSuffix *ngIf="removableInput.empty"
+							>description</mat-icon
+						>
+					</mat-form-field>
+					<div class="image-preview mb-3">
+						<span *ngIf="!isEdit">
+							<img
+								*ngIf="!this.previewUrl || removableInput.empty"
+								class="img-preview"
+								height="150"
+								width="150"
+							/>
+							<img
+								*ngIf="this.previewUrl && !removableInput.empty"
+								[src]="getSafeUrl(this.previewUrl)"
+								height="150"
+								width="150"
+							/>
+						</span>
+						<span *ngIf="isEdit">
+							<span *ngFor="let logo of this.clients.logo">
+								<span *ngIf="!this.previewUrl">
+									<img
+										*ngIf="length !== 0"
+										src="{{ logo.URLfileClientLogo }}"
+										height="150"
+										width="150"
+									/>
+								</span>
+								<span *ngIf="this.previewUrl">
+									<img
+										*ngIf="
+											this.previewUrl &&
+											!removableInput.empty
+										"
+										[src]="getSafeUrl(this.previewUrl)"
+										height="150"
+										width="150"
+									/>
+								</span>
+							</span>
+						</span>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col">
+					Nombre
+				</div>
+				<div class="col">
+					<mat-form-field appearance="outline" style="width: 100%;">
+						<mat-label>Nombre del cliente</mat-label>
+						<input
+							matInput
+							type="text"
+							placeholder="Nombre cliente"
+							name="name"
+							[(ngModel)]="this.clients.name"
+						/>
+					</mat-form-field>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col">
+					Razón social
+				</div>
+				<div class="col">
+					<mat-form-field appearance="outline" style="width: 100%;">
+						<mat-label>Razón social</mat-label>
+						<input
+							type="text"
+							matInput
+							placeholder="Razón social"
+							name="businessName"
+							[(ngModel)]="this.clients.businessName"
+						/>
+					</mat-form-field>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col">
+					RFC
+				</div>
+				<div class="col">
+					<mat-form-field appearance="outline" style="width: 100%;">
+						<mat-label>RFC</mat-label>
+						<input
+							type="text"
+							matInput
+							placeholder="RFC"
+							name="RFC"
+							[(ngModel)]="this.clients.RFC"
+						/>
+					</mat-form-field>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col">
+					Teléfono
+				</div>
+				<div class="col">
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1"
+								>📞</span
+							>
+						</div>
+						<input
+							type="number"
+							class="form-control"
+							placeholder="Telefono"
+							aria-label="Username"
+							name="phone"
+							[(ngModel)]="this.clients.phone"
+						/>
+					</div>
+				</div>
+			</div>
+			<br />
+			<div class="row">
+				<div class="col">
+					Corre electrónico
+				</div>
+				<div class="col">
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<span class="input-group-text" id="basic-addon1"
+								>@</span
+							>
+						</div>
+						<input
+							type="email"
+							class="form-control"
+							placeholder="correo@correo.com"
+							aria-label="Username"
+							[(ngModel)]="this.clients.email"
+							name="email"
+							aria-describedby="basic-addon1"
+						/>
+					</div>
+				</div>
+			</div>
+			<br />
+		</div>
+	</mat-card>
+</div>

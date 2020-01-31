@@ -1,0 +1,1105 @@
+<div class="container">
+	<div class="text-align">Usuario/Agregar usuario</div>
+
+	<div class="row">
+		<div class="col">
+			<div *ngIf="tabGroup.selectedIndex === 0">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="goBack()"
+				>
+					<a>Regresar</a>
+				</button>
+			</div>
+			<div *ngIf="tabGroup.selectedIndex === 1">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="tabGroup.selectedIndex = 0"
+				>
+					<a>Regresar</a>
+				</button>
+			</div>
+			<div *ngIf="tabGroup.selectedIndex === 2">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="tabGroup.selectedIndex = 1"
+				>
+					<a>Regresar</a>
+				</button>
+			</div>
+		</div>
+		<div class="col">
+			<div>Nuevo usuario | Ingrese los datos del usuario</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col add-btn">
+			<div *ngIf="tabGroup.selectedIndex === 0">
+				<div>
+					<button
+						type="button"
+						class="btn btn-outline-primary"
+						(click)="tabGroup.selectedIndex = 1"
+					>
+						siguiente
+					</button>
+				</div>
+			</div>
+			<div *ngIf="tabGroup.selectedIndex === 1">
+				<div>
+					<button
+						type="button"
+						class="btn btn-outline-primary"
+						(click)="tabGroup.selectedIndex = 2"
+					>
+						siguiente
+					</button>
+				</div>
+			</div>
+			<div *ngIf="tabGroup.selectedIndex === 2">
+				<span *ngIf="isEdit">
+					<button
+						type="button"
+						class="btn btn-outline-primary"
+						(click)="editUserBtn()"
+					>
+						<a>Guardar cambios</a>
+					</button>
+				</span>
+
+				<span *ngIf="!isEdit">
+					<button
+						type="button"
+						class="btn btn-outline-primary"
+						(click)="createUser()"
+					>
+						<a>Agregar</a>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<div class="endLine">
+			<mat-slide-toggle [(ngModel)]="this.user.status"
+				>Inactivo / Activo</mat-slide-toggle
+			>
+		</div>
+		<mat-tab-group #tabGroup>
+			<mat-tab label="Datos generales">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							Imagen Perfil
+						</div>
+
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-label>Imagen perfil</mat-label>
+
+								<ngx-mat-file-input
+									accept="image/*"
+									#removableInput
+									[(ngModel)]="imageLogo"
+									placeholder="Basic outline placeholder"
+									(change)="file($event)"
+								></ngx-mat-file-input>
+
+								<mat-icon
+									matSuffix
+									*ngIf="!removableInput.empty"
+									(click)="removableInput.clear($event)"
+									(click)="deleteFile($event)"
+									>clear</mat-icon
+								>
+
+								<mat-icon matSuffix *ngIf="removableInput.empty"
+									>description</mat-icon
+								>
+							</mat-form-field>
+							<div class="image-preview mb-3">
+								<span *ngIf="!isEdit">
+									<img
+										*ngIf="
+											!this.previewUrl ||
+											removableInput.empty
+										"
+										class="img-preview"
+										height="150"
+										width="150"
+									/>
+									<img
+										*ngIf="
+											this.previewUrl &&
+											!removableInput.empty
+										"
+										[src]="getSafeUrl(this.previewUrl)"
+										height="150"
+										width="150"
+									/>
+								</span>
+
+								<span *ngIf="isEdit">
+									<span
+										*ngFor="
+											let logo of this.user.personalData
+												.documents;
+											let i = index
+										"
+									>
+										<span *ngIf="!this.previewUrl">
+											<span
+												*ngIf="logo.URLfileProfileImage"
+											>
+												<img
+													*ngIf="length !== 0"
+													src="{{
+														logo.URLfileProfileImage
+													}}"
+													height="150"
+													width="150"
+												/>
+											</span>
+										</span>
+										<span *ngIf="this.previewUrl">
+											<span
+												*ngIf="logo.URLfileProfileImage"
+											>
+												<img
+													*ngIf="
+														this.previewUrl &&
+														!removableInput.empty
+													"
+													[src]="
+														getSafeUrl(
+															this.previewUrl
+														)
+													"
+													height="150"
+													width="150"
+												/>
+											</span>
+										</span>
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Usuario
+						</div>
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<input
+									matInput
+									required
+									[(ngModel)]="this.user.userName"
+									name="userName"
+									placeholder="correo@correo.com"
+								/>
+							</mat-form-field>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Cotraseña
+						</div>
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								style="width: 100%"
+								[color]="passwordComponent.color"
+							>
+								<mat-label>Password</mat-label>
+								<mat-pass-toggle-visibility
+									#toggleFirst
+									matSuffix
+								></mat-pass-toggle-visibility>
+								<input
+									matInput
+									#password
+									[type]="toggleFirst.type"
+									required
+									placeholder="Password"
+									[(ngModel)]="this.user.password"
+								/>
+								<mat-hint align="end" aria-live="polite">
+									{{ passStrength }}
+									{{ password.value.length }} /
+									{{ passwordComponent.max }}
+								</mat-hint>
+							</mat-form-field>
+							<!--@angular-material-extensions/password-strength's main component-->
+							<mat-password-strength
+								#passwordComponent
+								(onStrengthChanged)="onStrengthChanged($event)"
+								[password]="password.value"
+							>
+							</mat-password-strength>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Repetir contraseña
+						</div>
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								style="width: 100%"
+								[color]="passwordComponent.color"
+							>
+								<mat-label>Password</mat-label>
+								<mat-pass-toggle-visibility
+									#toggle
+									matSuffix
+								></mat-pass-toggle-visibility>
+								<input
+									matInput
+									#confirmPassword
+									[type]="toggle.type"
+									required
+									placeholder="Password"
+									[(ngModel)]="this.confirmPass"
+								/>
+								<mat-hint align="end" aria-live="polite">
+									{{ confirmStrength }}
+									{{ confirmPassword.value.length }} /
+									{{ passwordComponentConfirm.max }}
+								</mat-hint>
+							</mat-form-field>
+							<!--@angular-material-extensions/password-strength's main component-->
+							<mat-password-strength
+								#passwordComponentConfirm
+								(onStrengthChanged)="
+									onStrengthConfirmationChanged($event)
+								"
+								[password]="confirmPassword.value"
+							>
+							</mat-password-strength>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Fecha de incorporación
+						</div>
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<input
+									matInput
+									[matDatepicker]="incorPicker"
+									placeholder="Fecha de incorporación"
+									[(ngModel)]="this.user.incorporationDate"
+									name="incorporationDate"
+								/>
+								<mat-datepicker-toggle
+									matSuffix
+									[for]="incorPicker"
+								></mat-datepicker-toggle>
+								<mat-datepicker #incorPicker></mat-datepicker>
+							</mat-form-field>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							Permisos
+						</div>
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-label>Permisos</mat-label>
+
+								<mat-select [(ngModel)]="this.user.permissions">
+									<mat-option
+										*ngFor="let p of permissionsTable"
+										[value]="p.viewValue"
+									>
+										{{ p.viewValue }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</div>
+					</div>
+				</div>
+			</mat-tab>
+			<!-- Datos del usuario -->
+			<mat-tab label="Datos usuarios">
+				<div class="row">
+					<div class="col-4">
+						Nombre(s)
+					</div>
+					<div class="col">
+						<span
+							*ngIf="
+								isEdit && this.user.personalData !== undefined
+							"
+						>
+							<mat-form-field
+								appearance="outline"
+								style="width: 100%"
+							>
+								<mat-label>Nombre(s)</mat-label>
+								<input
+									matInput
+									[(ngModel)]="this.user.personalData.name"
+									name="name"
+									placeholder="Nombre(s)"
+								/>
+							</mat-form-field>
+						</span>
+						<span *ngIf="!isEdit">
+							<mat-form-field
+								appearance="outline"
+								style="width: 100%"
+							>
+								<mat-label>Nombre(s)</mat-label>
+								<input
+									matInput
+									[(ngModel)]="this.user.personalData.name"
+									name="name"
+									placeholder="Nombre(s)"
+								/>
+							</mat-form-field>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4">
+						Apellidos
+					</div>
+					<div class="col">
+						<mat-form-field
+							appearance="outline"
+							style="width: 100%"
+						>
+							<mat-label>Apellidos(s)</mat-label>
+							<input
+								matInput
+								[(ngModel)]="this.user.personalData.lastName"
+								name="lastName"
+								placeholder="Apellidos(s)"
+							/>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						CURP
+					</div>
+					<div class="col">
+						<span *ngIf="!isEdit">
+							<mat-form-field appearance="outline">
+								<mat-label>CURP</mat-label>
+								<input
+									matInput
+									[(ngModel)]="
+										this.user.personalData.documents[0].curp
+									"
+									name="curp"
+									placeholder="CURP"
+								/>
+							</mat-form-field>
+						</span>
+						<span
+							*ngFor="
+								let element of this.user.personalData.documents
+							"
+						>
+							<span *ngIf="element.curp && element.URLfileCURP">
+								<mat-form-field appearance="outline">
+									<mat-label>CURP</mat-label>
+									<input
+										matInput
+										[(ngModel)]="element.curp"
+										name="curp"
+										placeholder="CURP"
+									/>
+								</mat-form-field>
+							</span>
+						</span>
+					</div>
+					<div class="col">
+						<label class="custom-file-upload">
+							<input
+								multiple
+								type="file"
+								accept=".pdf"
+								(change)="fileforCurp($event)"
+							/>
+
+							<span class="fileText">
+								Adjuntar archivo
+							</span>
+						</label>
+						<span *ngIf="!isEdit">
+							<span *ngIf="this.fileCURP">
+								<label class="fileName">
+									{{ this.fileCURP.name }}
+									<i
+										class="fas fa-times"
+										(click)="deleteFile('CURP')"
+									></i>
+								</label>
+							</span>
+						</span>
+
+						<span *ngIf="isEdit">
+							<span
+								*ngFor="
+									let element of this.user.personalData
+										.documents
+								"
+							>
+								<span
+									*ngIf="
+										element.curp &&
+										element.URLfileCURP &&
+										!this.fileCURP
+									"
+								>
+									<label class="fileName">
+										{{ element.curp }}
+										<i
+											class="fas fa-times"
+											(click)="deleteFile('CURP')"
+										></i>
+									</label>
+								</span>
+							</span>
+							<span *ngIf="this.fileCURP">
+								<label class="fileName">
+									{{ this.fileCURP.name }}
+									<i
+										class="fas fa-times"
+										(click)="deleteFile('CURP')"
+									></i>
+								</label>
+							</span>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						RFC
+					</div>
+					<div class="col">
+						<span *ngIf="!isEdit">
+							<mat-form-field appearance="outline">
+								<mat-label>RFC</mat-label>
+								<input
+									matInput
+									[(ngModel)]="
+										this.user.personalData.documents[0].rfc
+									"
+									name="rfc"
+									placeholder="RFC"
+								/>
+							</mat-form-field>
+						</span>
+						<span
+							*ngFor="
+								let element of this.user.personalData.documents
+							"
+						>
+							<span *ngIf="element.rfc && element.URLfileRFC">
+								<mat-form-field appearance="outline">
+									<mat-label>RFC</mat-label>
+									<input
+										matInput
+										[(ngModel)]="element.rfc"
+										name="rfc"
+										placeholder="rfc"
+									/>
+								</mat-form-field>
+							</span>
+						</span>
+					</div>
+					<div class="col">
+						<label class="custom-file-upload">
+							<input
+								multiple
+								type="file"
+								accept=".pdf"
+								(change)="fileforRFC($event)"
+							/>
+
+							<span class="fileText">
+								Adjuntar archivo
+							</span>
+						</label>
+						<span *ngIf="!isEdit">
+							<span *ngIf="this.fileRFC">
+								<label class="fileName">
+									{{ this.fileRFC.name }}
+									<i
+										class="fas fa-times"
+										(click)="deleteFile('RFC')"
+									></i>
+								</label>
+							</span>
+						</span>
+						<span *ngIf="isEdit">
+							<span
+								*ngFor="
+									let element of this.user.personalData
+										.documents
+								"
+							>
+								<span
+									*ngIf="
+										element.rfc &&
+										element.URLfileRFC &&
+										!this.fileRFC
+									"
+								>
+									<label class="fileName">
+										{{ element.rfc }}
+										<i
+											class="fas fa-times"
+											(click)="deleteFile('RFC')"
+										></i>
+									</label>
+								</span>
+							</span>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						Fecha de nacimiento
+					</div>
+					<div class="col">
+						<span *ngIf="!isEdit">
+							<mat-form-field
+								appearance="outline"
+								class="input-date"
+							>
+								<input
+									matInput
+									[matDatepicker]="picker"
+									placeholder="Elige una fecha"
+									[(ngModel)]="
+										this.user.personalData.documents[0]
+											.birthDate
+									"
+									name="birthDate"
+								/>
+								<mat-datepicker-toggle
+									matSuffix
+									[for]="picker"
+								></mat-datepicker-toggle>
+								<mat-datepicker #picker></mat-datepicker>
+							</mat-form-field>
+						</span>
+						<span
+							*ngFor="
+								let element of this.user.personalData.documents
+							"
+						>
+							<span
+								*ngIf="
+									element.birthDate && element.URLfileBirth
+								"
+							>
+								<mat-form-field
+									appearance="outline"
+									class="input-date"
+								>
+									<input
+										matInput
+										[matDatepicker]="picker"
+										placeholder="Elige una fecha"
+										[(ngModel)]="element.birthDate"
+										name="birthDate"
+									/>
+									<mat-datepicker-toggle
+										matSuffix
+										[for]="picker"
+									></mat-datepicker-toggle>
+									<mat-datepicker #picker></mat-datepicker>
+								</mat-form-field>
+							</span>
+						</span>
+					</div>
+					<div class="col">
+						<label class="custom-file-upload">
+							<input
+								multiple
+								type="file"
+								accept=".pdf"
+								(change)="fileforDateBirth($event)"
+							/>
+
+							<span class="fileText">
+								Adjuntar archivo
+							</span>
+						</label>
+						<span *ngIf="!isEdit">
+							<span *ngIf="this.fileBirth">
+								<label class="fileName">
+									{{ this.fileBirth.name }}
+									<i
+										class="fas fa-times"
+										(click)="deleteFile('BIRTH')"
+									></i>
+								</label>
+							</span>
+						</span>
+						<span *ngIf="isEdit">
+							<span
+								*ngFor="
+									let element of this.user.personalData
+										.documents
+								"
+							>
+								<span
+									*ngIf="
+										element.birthDate &&
+										element.URLfileBirth &&
+										!this.fileBirth
+									"
+								>
+									<label class="fileName">
+										{{ element.birthDate }}
+										<i
+											class="fas fa-times"
+											(click)="deleteFile('BIRTH')"
+										></i>
+									</label>
+								</span>
+							</span>
+							<span *ngIf="this.URLfileBirth">
+								<label class="fileName">
+									{{ this.URLfileBirth.name }}
+									<i
+										class="fas fa-times"
+										(click)="deleteFile('BIRTH')"
+									></i>
+								</label>
+							</span>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						Número de seguro social
+					</div>
+					<div class="col">
+						<span *ngIf="!isEdit">
+							<mat-form-field appearance="outline">
+								<mat-label>NSS</mat-label>
+								<input
+									matInput
+									[(ngModel)]="
+										this.user.personalData.documents[0].nss
+									"
+									name="nss"
+									placeholder="NSS"
+								/>
+							</mat-form-field>
+						</span>
+
+						<span
+							*ngFor="
+								let element of this.user.personalData.documents
+							"
+						>
+							<span *ngIf="element.nss && element.URLfileNSS">
+								<mat-form-field appearance="outline">
+									<mat-label>NSS</mat-label>
+									<input
+										matInput
+										[(ngModel)]="element.nss"
+										name="nss"
+										placeholder="NSS"
+									/>
+								</mat-form-field>
+							</span>
+						</span>
+					</div>
+					<div class="col">
+						<label class="custom-file-upload">
+							<input
+								multiple
+								type="file"
+								accept=".pdf"
+								(change)="fileforNSS($event)"
+							/>
+
+							<span class="fileText">
+								Adjuntar archivo
+							</span>
+						</label>
+						<span *ngIf="!isEdit">
+							<span *ngIf="this.fileNSS">
+								<label class="fileName">
+									{{ this.fileNSS.name }}
+									<i
+										class="fas fa-times"
+										(click)="deleteFile('NSS')"
+									></i>
+								</label>
+							</span>
+						</span>
+						<span *ngIf="isEdit">
+							<span
+								*ngFor="
+									let element of this.user.personalData
+										.documents
+								"
+							>
+								<span
+									*ngIf="
+										element.nss &&
+										element.URLfileNSS &&
+										!this.fileNSS
+									"
+								>
+									<label class="fileName">
+										{{ element.nss }}
+										<i
+											class="fas fa-times"
+											(click)="deleteFile('NSS')"
+										></i>
+									</label>
+								</span>
+							</span>
+						</span>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4">Teléfono</div>
+					<div class="col">
+						<div class="input-group mb-3 input-size">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon1"
+									>📞</span
+								>
+							</div>
+							<input
+								type="number"
+								class="form-control"
+								placeholder="Teléfono"
+								[(ngModel)]="this.user.personalData.phone"
+								name="phone"
+								aria-label="Username"
+								aria-describedby="basic-addon1"
+							/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4">Correo electrónico</div>
+					<div class="col">
+						<div class="input-group mb-3 input-size">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="basic-addon1"
+									>✉</span
+								>
+							</div>
+							<input
+								type="email"
+								class="form-control"
+								placeholder="correo@correo.com"
+								aria-label="correo"
+								aria-describedby="basic-addon1"
+								[(ngModel)]="this.user.personalData.email"
+							/>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-4">Domicilio</div>
+					<div class="col">
+						<mat-form-field
+							class="example-full-width input-size"
+							appearance="outline"
+						>
+							<textarea
+								matInput
+								placeholder="Domicilio"
+								[(ngModel)]="this.user.personalData.address"
+							></textarea>
+						</mat-form-field>
+					</div>
+				</div>
+			</mat-tab>
+			<!-- Third Step -->
+			<mat-tab label="Puesto">
+				<div class="row">
+					<div class="col">
+						Agregar puesto
+					</div>
+					<div class="col">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Puesto"
+								[(ngModel)]="this.user.positionData.position"
+								name="position"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="
+										searchPosition($event.target.value)
+									"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<mat-option
+									*ngFor="let position of positions"
+									[value]="position._id"
+									>{{ position.name }}</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						Empresa
+					</div>
+					<div class="col">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Empresa"
+								[(ngModel)]="this.user.positionData.company"
+								name="company"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="
+										searchCompany($event.target.value)
+									"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<mat-option
+									*ngFor="let company of companies"
+									[value]="company.name"
+									>{{ company.name }}</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col">
+						Asignar rol
+					</div>
+					<div class="col">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Rol"
+								[(ngModel)]="this.user.positionData.role"
+								name="role"
+								(openChange)="myInput.focus()"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="searchRole($event.target.value)"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<mat-option
+									*ngFor="let role of roles"
+									[value]="role.name"
+									>{{ role.name }}</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col">
+						Asignar líder
+					</div>
+					<div class="col">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Líder"
+								[(ngModel)]="this.user.positionData.lead"
+								name="lead"
+								(openChange)="myInput.focus()"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="searchLead($event.target.value)"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<mat-option
+									*ngFor="let lead of users; let i = index"
+									[value]="lead._id"
+								>
+									<img
+										class="user-image"
+										src="{{ arrayImages[i] }}"
+										alt="user_image"
+									/>
+
+									{{ lead.personalData.name }}</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						Agregar colaboradores
+					</div>
+					<div class="col">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Colaboradores"
+								[formControl]="collaborators"
+								[(ngModel)]="
+									this.user.positionData.collaborators
+								"
+								name="collaborators"
+								multiple
+							>
+								<mat-select-trigger>
+									{{
+										collaborators.value
+											? collaborators.value[0]
+											: ""
+									}}
+									<span
+										*ngIf="collaborators.value?.length > 1"
+										class="example-additional-selection"
+									>
+										({{ collaborators.value.length - 1 }}
+										{{
+											collaborators.value?.length === 2
+												? "otro"
+												: "otres"
+										}})
+									</span>
+								</mat-select-trigger>
+
+								<input
+									#text
+									autocomplete="off"
+									class="searchInput"
+									focused="'true'"
+									placeholder="🔍 Buscar"
+									matInput
+								/>
+								<mat-divider></mat-divider>
+								<mat-option
+									*ngFor="
+										let collaborator of users;
+										let i = index
+									"
+									[class.hide]="
+										text.value !== '' &&
+										collaborator.personalData.name
+											.toLowerCase()
+											.indexOf(
+												text.value.toLowerCase()
+											) === -1
+									"
+									[value]="collaborator._id"
+								>
+									<img
+										class="user-image"
+										src="{{ arrayImages[i] }}"
+										alt="user_image"
+									/>
+									{{
+										collaborator.personalData.name
+									}}</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col">
+						Asignar sueldo
+					</div>
+					<div class="col">
+						<div class="row">
+							<div class="col">
+								<mat-form-field appearance="outline">
+									<mat-label>Sueldo</mat-label>
+									<input
+										[(ngModel)]="salary"
+										name="salary"
+										matInput
+										placeholder="$0.00"
+										type="number"
+									/>
+								</mat-form-field>
+							</div>
+							<div class="col">
+								<button
+									type="button"
+									class="btn btn-outline-primary"
+									(click)="updateSalary()"
+								>
+									<a>Actualizar sueldo</a>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col"></div>
+					<div class="col">
+						<table class="table">
+							<thead class="thead-dark">
+								<tr>
+									<th scope="col">Actualización</th>
+									<th scope="col">Sueldo</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let value of this.user.salary">
+									<td>${{ value.salary }} MX</td>
+									<td>{{ value.date }}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>

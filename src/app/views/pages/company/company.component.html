@@ -1,0 +1,112 @@
+<div class="container">
+	<div class="row">
+		<div class="col items-align">
+			<div class="text-align">Empresa |</div>
+			<div>
+				<form class="example-form">
+					<mat-form-field
+						class="example-full-width"
+						appearance="outline"
+					>
+						<input
+							type="text"
+							placeholder="Buscar"
+							aria-label="Number"
+							matInput
+							[formControl]="myControl"
+							[matAutocomplete]="auto"
+							[(ngModel)]="searchText"
+						/>
+						<mat-icon matSuffix>search</mat-icon>
+						<mat-autocomplete #auto="matAutocomplete">
+							<mat-option
+								*ngFor="let option of filteredOptions | async"
+								[value]="option"
+							>
+								{{ option }}
+							</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+				</form>
+			</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col-8 add-btn">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				(click)="createCompany()"
+			>
+				<a>Agregar empresa</a>
+			</button>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Empresa</th>
+					<th scope="col">Razón social</th>
+					<th scope="col">RFC</th>
+					<th scope="col">Datos de contacto</th>
+					<th scope="col">Acciones</th>
+				</tr>
+			</thead>
+			<tbody
+				*ngFor="
+					let company of companiesArray
+						| paginate: { itemsPerPage: 10, currentPage: p }
+						| grdFilter: { name: searchText };
+					let i = index
+				"
+			>
+				<tr>
+					<span *ngIf="!companiesArray">
+						<mat-spinner></mat-spinner>
+					</span>
+					<span
+						*ngFor="let x of company.logo"
+						(click)="companyProfile(i)"
+					>
+						<td *ngIf="x.URLCompanylogo">
+							<img
+								src="{{ x.URLCompanylogo }}"
+								class="user-image"
+								style="cursor: pointer;"
+							/>
+							{{ company.name }}
+						</td>
+					</span>
+					<td>{{ company.businessName }}</td>
+					<td>{{ company.RFC }}</td>
+					<td>{{ company.email }}</td>
+					<td>
+						<div class="row">
+							<div class="col">
+								<i
+									class="far fa-edit icon-color"
+									(click)="editCompany(i)"
+								></i>
+							</div>
+							<div class="col">
+								<i
+									class="far fa-trash-alt icon-color"
+									(click)="deleteCompany(i)"
+								></i>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table> </mat-card
+	><br />
+	<pagination-controls
+		class="my-pagination"
+		(pageChange)="p = $event"
+		previousLabel="Anterior"
+		nextLabel="Siguiente"
+	>
+	</pagination-controls>
+</div>
+<br />

@@ -1,0 +1,90 @@
+<div class="container">
+	<div class="text-align">Cliente/Perfil de cliente</div>
+
+	<div class="row">
+		<div class="col">
+			<div>Perfil de cliente | Ver y editar el perfil de cliente</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col btn-slide">
+			<mat-slide-toggle>Inactivo/Activo</mat-slide-toggle>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<div class="row">
+			<div class="col-2 img-profile">
+				<div class="size-img" *ngFor="let logo of clients.logo">
+					<img class="clientImage" src="{{logo.URLfileClientLogo}}" />
+				</div>
+			</div>
+
+			<div class="profile-text col clientText">
+				{{clients.name}}
+			</div>
+		</div>
+		<div class="btn-edit text-color " (click)="editClient()">
+			<i class="far fa-edit icon-color" > </i>
+			Editar
+		</div>
+		<br /><br />
+		<mat-tab-group>
+			<mat-tab label="Información general">
+				<div class="row">
+					<div class="col">
+						Nombre
+					</div>
+					<div class="col">
+						{{clients.name}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Razon social
+					</div>
+					<div class="col">
+						{{clients.businessName}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						RFC
+					</div>
+					<div class="col">
+						{{clients.RFC}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Dirección de envío
+					</div>
+					<div class="col">
+						{{clients.email}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Telefono
+					</div>
+					<div class="col">
+						{{clients.phone}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						correo electrónico
+					</div>
+					<div class="col">
+						{{clients.email}}
+					</div>
+				</div>
+				<br /><br />
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>

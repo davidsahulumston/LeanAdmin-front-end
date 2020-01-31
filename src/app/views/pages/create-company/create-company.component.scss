@@ -1,0 +1,74 @@
+.text-center {
+    display: flex;
+    align-items: center;
+}
+
+.width-btn {
+    width: 10em;
+    height: 3em;
+}
+
+.align-btn {
+    padding-top: .5em;
+}
+
+.icon-color {
+	color: #6020DE;
+	font-size: 1.3em;
+	font-weight: bolder !important;
+	cursor: pointer;
+}
+
+
+.text-align {
+    display: flex;
+	align-items: center;
+    justify-content: flex-end;
+    width: 140px;
+    padding-right: 1em;
+}
+
+.add-btn {
+    display: flex;
+	justify-content: flex-end;
+}
+
+.items-align {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.img-preview {
+    border: 2px dotted #C5C5C5;
+    border-radius: 20;
+}
+
+
+.custom-dropzone {
+    height: 100px;
+    width: 100px;
+	color: #333;
+	border: 2px dashed #C5C5C5;
+	border-radius: 5px;
+	font-size: 20px;
+}
+
+.preview-img {
+    height: 80px!important;
+    width: 80px!important;
+}
+
+.input-size {
+    width: 100%;
+}
+
+.user-image { 
+    width: 30px!important;
+    height: 30px!important;
+    border-radius: 50%;
+}
+
+.searchInput {
+    height: 4em;
+    padding-left: 1.5em;
+}

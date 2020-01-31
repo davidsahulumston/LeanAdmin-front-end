@@ -1,0 +1,28 @@
+<div class="row">
+	<div class="col">
+		<div mat-dialog-content>
+			<p>Nuevo puesto</p>
+			<mat-form-field style="width: 500px;">
+				<input matInput [(ngModel)]="data.name" />
+			</mat-form-field>
+		</div>
+	</div>
+</div>
+<div mat-dialog-actions style="display: flex!important;justify-content: space-evenly;">
+  
+		<div>
+			<button type="button" class="btn btn-dark" (click)="onNoClick()">
+				Cancelar
+			</button>
+		</div>
+		<div>
+			<button
+				type="button"
+				(click)="addPosition()"
+				class="btn btn-primary"
+			>
+				Agregar puesto
+			</button>
+		</div>
+	
+</div>

@@ -1,0 +1,35 @@
+.userText {
+	display: flex;
+	align-items: center;
+}
+.iconSize {
+	font-size: 1.2em;
+}
+
+.userName {
+	color: #6020de;
+	padding-top: 1.2em;
+	padding-right: 1em;
+	font-weight: bolder;
+	font-size: 20px;
+}
+
+.purpleText {
+	color: #6020de;
+	padding-top: 1.2em;
+	padding-right: 1em;
+	font-size: 14px;
+}
+
+.icon-color {
+	color: #6020de;
+	font-size: 1.2em;
+	font-weight: bolder !important;
+	cursor: pointer;
+}
+
+.userProfile {
+	width: 130px;
+    height: 130px;
+    border-radius: 10px;
+}

@@ -1,0 +1,54 @@
+<div class="row">
+	<div class="col">
+		<div mat-dialog-content>
+			<p>Vacaciones</p>
+			<div class="row">
+				<div class="col">
+					<mat-form-field>
+						<input
+							matInput
+							[matDatepicker]="Startpicker"
+                            placeholder="Desde"
+                            [(ngModel)]="data.startDate"
+						/>
+						<mat-datepicker-toggle
+							matSuffix
+							[for]="Startpicker"
+						></mat-datepicker-toggle>
+						<mat-datepicker #Startpicker></mat-datepicker>
+					</mat-form-field>
+				</div>
+				<div class="col">
+					<mat-form-field>
+						<input
+							matInput
+							[matDatepicker]="Endpicker"
+                            placeholder="Hasta"
+                            [(ngModel)] = "data.endDate"
+						/>
+						<mat-datepicker-toggle
+							matSuffix
+							[for]="Endpicker"
+						></mat-datepicker-toggle>
+						<mat-datepicker #Endpicker></mat-datepicker>
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div
+	mat-dialog-actions
+	style="display: flex!important;justify-content: space-evenly;"
+>
+	<div>
+		<button type="button" class="btn btn-dark" (click)="onNoClick()">
+			Cancelar
+		</button>
+	</div>
+	<div>
+		<button type="button" (click)="addVacations()" class="btn btn-primary">
+			Agregar vacaciones
+		</button>
+	</div>
+</div>

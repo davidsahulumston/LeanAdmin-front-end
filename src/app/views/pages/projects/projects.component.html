@@ -1,0 +1,112 @@
+<div class="container">
+	<div class="row">
+		<div class="col items-align">
+			<div class="text-align">Proyectos |</div>
+			<div>
+				<form class="example-form">
+					<mat-form-field
+						class="example-full-width"
+						appearance="outline"
+					>
+						<input
+							type="text"
+							placeholder="Buscar"
+							aria-label="Number"
+							matInput
+							[formControl]="myControl"
+							[matAutocomplete]="auto"
+							[(ngModel)]="searchText"
+						/>
+						<mat-icon matSuffix>search</mat-icon>
+						<mat-autocomplete #auto="matAutocomplete">
+							<mat-option
+								*ngFor="let option of filteredOptions | async"
+								[value]="option"
+							>
+								{{ option }}
+							</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+				</form>
+			</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col-6 add-btn">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				(click)="createProject()"
+			>
+				<a>Agregar Proyecto</a>
+			</button>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Nombre</th>
+					<th scope="col">Clientes</th>
+					<th scope="col">Empresa</th>
+					<th scope="col">Líneas de negocio</th>
+					<th scope="col">Tipo de servicio</th>
+					<th scope="col">Estado</th>
+					<th scope="col">Acciones</th>
+				</tr>
+			</thead>
+			<tbody
+				*ngFor="
+					let project of projectsArray
+						| paginate: { itemsPerPage: 10, currentPage: p }
+						| grdFilter: { name: searchText };
+					let i = index
+				"
+			>
+				<tr>
+					<td (click)="projectProfile(i)">
+						<i
+							class="fas fa-circle text-color"
+							style="cursor: pointer;"
+						></i>
+						{{ project.name }}
+					</td>
+					<td>{{ project.client.name }}</td>
+					<td>{{ project.company.name }}</td>
+					<td>{{ project.businessName }}</td>
+					<td class="text-color">{{ project.serviceName }}</td>
+
+					<span *ngIf="project.status === true">
+						<td>Activo</td>
+					</span>
+					<span *ngIf="project.status === false">
+						<td>Inactivo</td>
+					</span>
+
+					<td>
+						<div class="row">
+							<div class="col">
+								<i
+									(click)="editProject(i)"
+									class="far fa-edit icon-color"
+								></i>
+							</div>
+							<div class="col">
+								<i
+									(click)="deleteProject(i)"
+									class="far fa-trash-alt icon-color"
+								></i>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table> </mat-card
+	><br />
+	<pagination-controls
+		class="my-pagination"
+		(pageChange)="p = $event"
+		previousLabel="Anterior"
+		nextLabel="Siguiente"
+	></pagination-controls>
+</div>

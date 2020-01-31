@@ -1,0 +1,31 @@
+.icon-color {
+	color: #6020DE;
+	font-size: 1.3em;
+	font-weight: bolder !important;
+	cursor: pointer;
+}
+
+.btn-user {
+    display: flex;
+    justify-content: flex-end;
+    width: 20px;
+    height: 4em;
+}
+
+.icon-plus {
+	color: #6020DE;
+	cursor: pointer;
+
+}
+
+.my-pagination ::ng-deep  .ngx-pagination .current {
+    background: #6020DE;
+}
+
+.user-image { 
+    width: 30px!important;
+    height: 30px!important;
+    border-radius: 50%;
+    cursor: pointer;
+}
+

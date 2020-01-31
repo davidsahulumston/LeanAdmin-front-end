@@ -1,0 +1,483 @@
+<div class="container">
+	<div class="row">
+		<div class="col" *ngIf="tabGroup.selectedIndex === 1">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				(click)="tabGroup.selectedIndex = 0"
+			>
+				<a>Regresar</a>
+			</button>
+		</div>
+		<div class="col" *ngIf="tabGroup.selectedIndex === 2">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				(click)="tabGroup.selectedIndex = 1"
+			>
+				<a>Regresar</a>
+			</button>
+		</div>
+		<div class="col" *ngIf="tabGroup.selectedIndex === 0">
+			<button
+				type="button"
+				class="btn btn-outline-primary"
+				[disabled]="true"
+				(click)="tabGroup.selectedIndex = 0"
+			>
+				<a>Regresar</a>
+			</button>
+		</div>
+		<div class="col items-align">
+			<div class="text-align">Nueva Empresa |</div>
+			<div>
+				Ingrese los datos de la empresa
+			</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col-4 add-btn" *ngIf="tabGroup.selectedIndex === 0">
+			<div>
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="tabGroup.selectedIndex = 1"
+				>
+					siguiente
+				</button>
+			</div>
+		</div>
+		<div class="col-4 add-btn" *ngIf="tabGroup.selectedIndex === 1">
+			<div>
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="tabGroup.selectedIndex = 2"
+				>
+					siguiente
+				</button>
+			</div>
+		</div>
+		<div class="col-4 add-btn" *ngIf="tabGroup.selectedIndex === 2">
+			<span *ngIf="!isEdit">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="createCompanyBtn()"
+				>
+					<a>Agregar</a>
+				</button>
+			</span>
+
+			<span *ngIf="isEdit">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="editCompanyBtn()"
+				>
+					<a>Guardar cambios</a>
+				</button>
+			</span>
+		</div>
+	</div>
+
+	<br />
+	<mat-card>
+		<mat-tab-group #tabGroup>
+			<mat-tab label="Datos generales">
+				<div class="container">
+					<div class="row">
+						<div class="col">
+							Logo
+						</div>
+
+						<div class="col">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-label>Logo</mat-label>
+
+								<ngx-mat-file-input
+									#removableInput
+									[(ngModel)]="imageLogo"
+									formControlName="outline"
+									placeholder="Basic outline placeholder"
+									(change)="file($event)"
+								>
+								</ngx-mat-file-input>
+
+								<mat-icon
+									matSuffix
+									*ngIf="!removableInput.empty"
+									(click)="removableInput.clear($event)"
+									>clear</mat-icon
+								>
+
+								<mat-icon matSuffix *ngIf="removableInput.empty"
+									>description</mat-icon
+								>
+							</mat-form-field>
+							<div class="image-preview mb-3">
+								<span *ngIf="!isEdit">
+									<img
+										*ngIf="
+											!this.previewUrl ||
+											removableInput.empty
+										"
+										class="img-preview"
+										height="150"
+										width="150"
+									/>
+									<img
+										*ngIf="
+											this.previewUrl &&
+											!removableInput.empty
+										"
+										[src]="getSafeUrl(this.previewUrl)"
+										height="150"
+										width="150"
+									/>
+								</span>
+								<span *ngIf="isEdit">
+									<span
+										*ngFor="let logo of this.company.logo"
+									>
+										<span *ngIf="!this.previewUrl">
+											<img
+												*ngIf="length !== 0"
+												src="{{
+													logo.URLCompanylogo
+												}}"
+												height="150"
+												width="150"
+											/>
+										</span>
+										<span *ngIf="this.previewUrl">
+											<img
+												*ngIf="
+													this.previewUrl &&
+													!removableInput.empty
+												"
+												[src]="
+													getSafeUrl(this.previewUrl)
+												"
+												height="150"
+												width="150"
+											/>
+										</span>
+									</span>
+								</span>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Nombre
+						</div>
+						<div class="col">
+							<input
+								type="text"
+								class="form-control"
+								placeholder="Nombre Empresa"
+								aria-label="Username"
+								aria-describedby="basic-addon1"
+								name="name"
+								[(ngModel)]="this.company.name"
+							/>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Razón social
+						</div>
+						<div class="col">
+							<input
+								type="text"
+								class="form-control"
+								placeholder="Razón social"
+								aria-label="Username"
+								aria-describedby="basic-addon1"
+								name="businessName"
+								[(ngModel)]="this.company.businessName"
+							/>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							RFC
+						</div>
+						<div class="col">
+							<input
+								type="text"
+								class="form-control"
+								placeholder="RFC"
+								aria-label="Username"
+								aria-describedby="basic-addon1"
+								name="RFC"
+								[(ngModel)]="this.company.RFC"
+							/>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Teléfono
+						</div>
+						<div class="col">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span
+										class="input-group-text"
+										id="basic-addon1"
+										>📞</span
+									>
+								</div>
+								<input
+									type="number"
+									class="form-control"
+									placeholder="Telefono"
+									aria-label="Username"
+									aria-describedby="basic-addon1"
+									name="phone"
+									[(ngModel)]="this.company.phone"
+								/>
+							</div>
+						</div>
+					</div>
+					<br />
+					<div class="row">
+						<div class="col">
+							Corre electrónico
+						</div>
+						<div class="col">
+							<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<span
+										class="input-group-text"
+										id="basic-addon1"
+										>@</span
+									>
+								</div>
+								<input
+									type="text"
+									class="form-control"
+									placeholder="correo@correo.com"
+									aria-label="correo"
+									aria-describedby="basic-addon1"
+									name="email"
+									[(ngModel)]="this.company.email"
+								/>
+							</div>
+						</div>
+					</div>
+					<br />
+				</div>
+			</mat-tab>
+			<!-- Second tab -->
+			<mat-tab label="Lineas de negocio">
+				<div class="container">
+					<div class="row">
+						<div class="col text-center">
+							Nueva línea de negocio
+						</div>
+						<div class="col">
+							<mat-form-field appearance="outline">
+								<mat-label>Nombre</mat-label>
+								<input
+									matInput
+									placeholder="Nombre"
+									name="businessLineName"
+									[(ngModel)]="businessLineName"
+								/>
+							</mat-form-field>
+						</div>
+						<div class="col">
+							<mat-form-field appearance="outline">
+								<mat-select
+									placeholder="Líder"
+									[(ngModel)]="selectedLeadBusinessLine"
+									name="lead"
+									(openChange)="myInput.focus()"
+								>
+									<input
+										class="searchInput"
+										matInput
+										focused="'true'"
+										type="text"
+										(keyup)="
+											searchLead($event.target.value)
+										"
+										autocomplete="off"
+										placeholder="🔍 Buscar"
+									/>
+									<mat-divider></mat-divider>
+									<mat-option
+										*ngFor="let lead of users"
+										[value]="lead.personalData.name"
+									>
+										<span
+											*ngFor="
+												let x of lead.personalData
+													.documents
+											"
+										>
+											<span *ngIf="x.URLfileProfileImage">
+												<img
+													class="user-image"
+													src="{{
+														x.URLfileProfileImage
+													}}"
+													alt="user_image"
+												/>
+											</span>
+										</span>
+										{{ lead.personalData.name }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="col">
+							<button
+								type="button"
+								class="btn btn-outline-primary width-btn"
+								(click)="addBusinessLine()"
+							>
+								<a>Agregar línea</a>
+							</button>
+						</div>
+					</div>
+
+					<div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Nombre</th>
+									<th scope="col">Líder</th>
+									<th scope="col">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr
+									*ngFor="
+										let businessTable of this.company
+											.businessLine;
+										let i = index
+									"
+								>
+									<td>{{ businessTable.name }}</td>
+									<td>{{ businessTable.lead }}</td>
+									<td>
+										<div class="row">
+											<div class="col">
+												<i
+													class="far fa-edit icon-color"
+												></i>
+											</div>
+											<div class="col">
+												<i
+													class="far fa-trash-alt icon-color"
+													(click)="
+														deleteBusinessLine(i)
+													"
+												></i>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</mat-tab>
+			<!-- Tirdh tab -->
+			<mat-tab label="Tipo de servicio">
+				<div class="container">
+					<div class="row">
+						<div class="col text-center">
+							Nuevo servicio
+						</div>
+						<div class="col">
+							<mat-form-field appearance="outline">
+								<mat-label>Nombre</mat-label>
+								<input
+									matInput
+									placeholder="Nombre"
+									name="serviceName"
+									[(ngModel)]="serviceName"
+								/>
+							</mat-form-field>
+						</div>
+						<div class="col">
+							<mat-form-field appearance="outline">
+								<mat-select
+									placeholder="Linea de negocio"
+									[(ngModel)]="selectedBusinessLine"
+									name="line"
+								>
+									<mat-option
+										*ngFor="
+											let businessLine of this.company
+												.businessLine
+										"
+										[value]="businessLine.name"
+										>{{ businessLine.name }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+						</div>
+						<div class="col align-btn">
+							<button
+								type="button"
+								class="btn btn-outline-primary width-btn"
+								(click)="addService()"
+							>
+								<a>Agregar Servicio</a>
+							</button>
+						</div>
+					</div>
+					<div>
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Nombre</th>
+									<th scope="col">Lineas de negocio</th>
+									<th scope="col">Acciones</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr
+									*ngFor="
+										let serviceTable of this.company
+											.services;
+										let i = index
+									"
+								>
+									<td>{{ serviceTable.name }}</td>
+									<td>{{ serviceTable.line }}</td>
+									<td>
+										<div class="row">
+											<div class="col">
+												<i
+													class="far fa-edit icon-color"
+												></i>
+											</div>
+											<div class="col">
+												<i
+													(click)="deleteService(i)"
+													class="far fa-trash-alt icon-color"
+												></i>
+											</div>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>

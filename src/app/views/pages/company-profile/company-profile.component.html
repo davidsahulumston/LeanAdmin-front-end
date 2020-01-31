@@ -1,0 +1,80 @@
+<div class="container">
+	<div class="text-align">Empresa/Perfil de empresa</div>
+
+	<div class="row">
+		<div class="col">
+			<div>Perfil de empresa | Ver y editar el perfil de empresa</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col btn-slide">
+			<mat-slide-toggle>Inactivo/Activo</mat-slide-toggle>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<div class="row">
+			<div class="col-2 img-profile" *ngIf="company.length !== 0">
+				<div class="size-img" *ngFor="let logo of company.logo" >
+					<img class="clientImage" src="{{logo.URLCompanylogo}}" />
+				</div>
+			</div>
+
+			<div class="profile-text col clientText" *ngIf="company.length !== 0">
+				{{company.name}}
+			</div>
+		</div>
+		<div class="btn-edit">
+			<i class="far fa-edit icon-color" (click)="editUser()"> Editar</i>
+		</div>
+		<br /><br />
+		<mat-tab-group>
+			<mat-tab label="Información general">
+				<div class="row">
+					<div class="col">
+						Nombre
+					</div>
+					<div class="col" *ngIf="company.length !== 0">
+						{{company.name}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Razon social
+					</div>
+					<div class="col" *ngIf="company.length !== 0">
+						{{company.businessName}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						RFC
+					</div>
+					<div class="col" *ngIf="company.length !== 0">
+						{{company.RFC}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Correo electrónico
+					</div>
+					<div class="col" *ngIf="company.length !== 0">
+						{{company.email}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Telefono
+					</div>
+					<div class="col" *ngIf="company.length !== 0">
+						{{company.phone}}
+					</div>
+				</div>
+				<br /><br />
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>

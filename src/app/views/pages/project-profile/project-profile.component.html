@@ -1,0 +1,117 @@
+<div class="container">
+	<div class="text-align">Proyecto/Perfil del proyecto</div>
+
+	<div class="row">
+		<div class="col">
+			<div>Perfil del proyecto | Ver y editar el perfil del proyecto</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col btn-edit">
+			<mat-slide-toggle>Inactivo/Activo</mat-slide-toggle>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<div class="row">
+			<div class="col-2 img-profile">
+				<div class="size-img" *ngFor="let logo of projects">
+					<img class="clientImage" src="" />
+				</div>
+			</div>
+
+			<div class="profile-text col projectName">
+				{{project.name}}
+			</div>
+		</div>
+		<div class="btn-edit textColor ">
+			<i class="far fa-edit icon-color" (click)="editProject()"></i>
+			Editar
+		</div>
+		<br /><br />
+		<mat-tab-group>
+			<mat-tab label="Información general">
+				<div class="row">
+					<div class="col">
+						Nombre del proyecto
+					</div>
+					<div class="col " *ngIf="project.length !== 0" >
+						{{project.name}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Descripción
+					</div>
+					<div class="col" *ngIf="project.length !== 0">
+						{{project.description}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Empresa
+					</div>
+					<div class="col" *ngIf="project.length !== 0">
+						{{project.company.name}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Líneas de negocio
+					</div>
+					<div class="col" *ngIf="project.length !== 0">
+						{{project.businessName}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Cliente
+					</div>
+					<div class="col" *ngIf="project.length !== 0">
+						{{project.client.name}}
+					</div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col purpleText">
+						Colaboradores
+					</div>
+				</div>
+					<div class="col" *ngIf="project.length !== 0">
+						<table class="table">
+							<thead>
+								<tr>
+									<th scope="col">Nombre</th>
+									<th scope="col">Rol</th>
+									<th scope="col">Horas</th>
+								</tr>
+							</thead>
+							<tbody *ngFor="
+									let resource of project.resources
+										| paginate: { itemsPerPage: 10, currentPage: p }
+										| grdFilter: { name: searchText };
+									let i = index
+								">
+								<tr>
+
+									<span *ngFor="let x of resource.name.personalData.documents">
+										<td *ngIf="x.URLfileProfileImage"><img src={{x.URLfileProfileImage}}
+												class="userProfile"> {{ resource.name.user }}</td>
+									</span>
+
+									<td>{{ resource.role.name }}</td>
+									<td>{{ resource.hrs }}</td>
+								</tr>
+
+							</tbody>
+						</table>
+					</div>
+				
+				<br /><br />
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>

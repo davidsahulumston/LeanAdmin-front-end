@@ -1,0 +1,73 @@
+<div class="container">
+	<div class="row">
+		<div class="col items-align">
+			<div class="text-align">Clientes |</div>
+			<div>
+				<form class="example-form">
+					<mat-form-field class="example-full-width" appearance="outline">
+						<input type="text" placeholder="Buscar" aria-label="Number" matInput [formControl]="myControl"
+							[matAutocomplete]="auto" [(ngModel)]="searchText" />
+						<mat-icon matSuffix>search</mat-icon>
+						<mat-autocomplete #auto="matAutocomplete">
+							<mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+								{{ option }}
+							</mat-option>
+						</mat-autocomplete>
+					</mat-form-field>
+				</form>
+			</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col-8 add-btn">
+			<button type="button" class="btn btn-outline-primary" (click)="createClient()">
+				<a>Agregar clientes</a>
+			</button>
+		</div>
+	</div>
+	<br />
+	<mat-card>
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Nombre</th>
+					<th scope="col">Razón social</th>
+					<th scope="col">RFC</th>
+					<th scope="col">Contacto</th>
+					<th scope="col">Acciones</th>
+				</tr>
+			</thead>
+			<tbody *ngFor="
+					let client of clientsArray
+						| paginate: { itemsPerPage: 10, currentPage: p }
+						| grdFilter: { name: searchText };
+					let i = index
+				">
+				<tr>
+					<span *ngFor="let x of client.logo" (click)="clientProfile(i)">
+						<td *ngIf="x.URLfileClientLogo"><img src={{x.URLfileClientLogo}}
+							class="user-image"style="cursor: pointer;"> {{ client.name }}</td>
+					</span>
+
+					<!-- <td (click)="clientProfile(i)">
+						<img src={{logos[i]}} class="user-image" style="cursor: pointer;"> {{ client.name }}</td> -->
+					<td>{{ client.businessName }}</td>
+					<td>{{ client.RFC }}</td>
+					<td>{{ client.email }}</td>
+					<td>
+						<div class="row">
+							<div class="col">
+								<i (click)="editClient(i)" class="far fa-edit icon-color"></i>
+							</div>
+							<div class="col">
+								<i (click)="deleteClient(i)" class="far fa-trash-alt icon-color"></i>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</mat-card><br />
+	<pagination-controls class="my-pagination" (pageChange)="p = $event" previousLabel="Anterior" nextLabel="Siguiente">
+	</pagination-controls>
+</div>
+<br />

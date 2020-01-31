@@ -1,0 +1,114 @@
+<div class="container">
+	<mat-card>
+		<div class="row"></div>
+		<div class="row userText">
+			<div class="col-2" *ngFor="let logo of profileImage">
+				<img src="{{logo.URLfileProfileImage}}" class="userProfile" />
+			</div>
+			<div class="col userName" *ngIf="user.length !== 0">
+				{{user.personalData.name}} {{user.personalData.lastName}}
+				<div class="row purpleText">
+					<div class="col"><i class="fas fa-piggy-bank iconSize"></i>
+						$12,000</div>
+
+					<div class="col" *ngIf="user.length !== 0"><i class="far fa-user-circle iconSize"></i>
+						{{user.positionData.position.name}}
+					</div>
+					<div class="col" *ngIf="user.length !== 0" ><i class="far fa-envelope iconSize"></i> {{user.personalData.email}}</div>
+				</div>
+			</div>
+		</div>
+		<div class="row"></div>
+		<mat-tab-group>
+			<mat-tab label="Datos generales">
+				<div class="row">
+					<div class="col">
+						Imagen de perfil
+					</div>
+					<div class="col"></div>
+				</div>
+				<br /><br />
+				<div class="row">
+					<div class="col">
+						Usuario
+					</div>
+					<div class="col" *ngIf="user.length !== 0">
+						{{user.user}}
+					</div>
+				</div>
+				<br /><br />
+
+				<div class="row">
+					<div class="col">
+						Contraseña
+					</div>
+					<div class="col">
+						*******
+					</div>
+				</div>
+				<br /><br />
+
+				<div class="row">
+					<div class="col">
+						Fecha de incorporación
+					</div>
+					<div class="col" *ngIf="user.length !== 0">
+						{{user.incorporationDate}}
+					</div>
+				</div>
+				<br /><br />
+
+				<div class="row">
+					<div class="col">
+						Permisos
+					</div>
+					<div class="col" *ngIf="user.length !== 0">
+						{{user.permissions.value}}
+					</div>
+				</div>
+				<br /><br />
+
+			</mat-tab>
+			<mat-tab label="Datos de usuario"> Content 2 </mat-tab>
+			<mat-tab label="Puesto"> Content 3 </mat-tab>
+			<mat-tab label="Vacaciones">
+				<div class="row">
+					<div class="col">
+						<div>Dias utilizados</div>
+						<div>0</div>
+					</div>
+					<div class="col">
+						<div>Dias disponibles</div>
+						<div>1</div>
+					</div>
+				</div>
+				<div class="row">
+					<button type="button" class="btn btn-outline-primary" (click)="solicitar()">
+						<a>Solicitar</a>
+					</button>
+				</div>
+				<div class="row">
+					<div>Historial de vacaciones</div>
+					<table class="table">
+						<thead>
+							<tr>
+								<th scope="col">Inicio</th>
+								<th scope="col"></th>
+								<th scope="col">Fin</th>
+								<th scope="col">Dias</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>26/12/2019</td>
+								<td>➡</td>
+								<td>26/12/2019</td>
+								<td>3</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>

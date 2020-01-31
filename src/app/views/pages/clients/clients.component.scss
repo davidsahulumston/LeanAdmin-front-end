@@ -1,0 +1,41 @@
+.text-align {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	padding-right: 1em;
+}
+
+.add-btn {
+	padding-top: 1em;
+	display: flex;
+	justify-content: flex-end;
+	max-height: 50px !important;
+}
+
+.items-align {
+	display: flex;
+	width: 20em;
+	justify-content: flex-start;
+}
+
+.container-table {
+	display: flex;
+	// padding: 7em;
+}
+
+.icon-color {
+	color: #6020DE;
+	font-size: 1.3em;
+	font-weight: bolder !important;
+	cursor: pointer;
+}
+
+.my-pagination ::ng-deep  .ngx-pagination .current {
+	background: #6020DE;
+}
+
+.user-image {
+	width: 30px !important;
+	height: 30px !important;
+	border-radius: 10%;
+}

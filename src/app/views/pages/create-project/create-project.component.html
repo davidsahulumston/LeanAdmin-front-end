@@ -1,0 +1,531 @@
+<div class="container">
+	<div class="text-align">Proyecto/Agregar Proyect</div>
+
+	<div class="row">
+		<div class="col">
+			<div *ngIf="tabGroup.selectedIndex === 1">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="tabGroup.selectedIndex = 0"
+				>
+					<a>Regresar</a>
+				</button>
+			</div>
+
+			<div *ngIf="tabGroup.selectedIndex === 0">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="backTab()"
+				>
+					<a>Regresar</a>
+				</button>
+			</div>
+		</div>
+		<div class="col-4 project-text">
+			<div>Nuevo Proyecto | Ingrese los datos del proyecto y envie</div>
+		</div>
+		<!-- <div class="col-3"></div> -->
+		<div class="col btn-add">
+		
+			<div *ngIf="tabGroup.selectedIndex === 0">
+				<button
+					type="button"
+					class="btn btn-outline-primary"
+					(click)="tabGroup.selectedIndex = 1"
+				>
+					Siguiente
+				</button>
+			</div>
+			<div *ngIf="tabGroup.selectedIndex === 1">
+				<span *ngIf="!isEdit">
+					<button
+						type="button"
+						class="btn btn-outline-primary"
+						(click)="createProject()"
+					>
+						<a>Agregar</a>
+					</button>
+				</span>
+				<span *ngIf="isEdit">
+					<button
+						type="button"
+						class="btn btn-outline-primary"
+						(click)="editProjectBtn()"
+					>
+						<a>Guardar cambios</a>
+					</button>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<br />
+	<mat-card>
+		<div class="endLine">
+			<mat-slide-toggle [(ngModel)]="this.project.status"
+				>Inactivo / Activo</mat-slide-toggle
+			>
+		</div>
+		<mat-tab-group #tabGroup>
+			<mat-tab label=" Detalles del proyecto">
+				<div class="row">
+					<div class="col">
+						Nombre del proyecto
+					</div>
+					<div class="col">
+						<mat-form-field
+							appearance="outline"
+							style="width: 100%;"
+						>
+							<mat-label>Nombre del proyecto</mat-label>
+							<input
+								matInput
+								name="name"
+								[(ngModel)]="this.project.name"
+								placeholder="Nombre del proyecto"
+							/>
+						</mat-form-field>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col">
+						Descripción
+					</div>
+					<div class="col">
+						<mat-form-field
+							appearance="outline"
+							style="width: 100%;"
+						>
+							<mat-label>Descripción</mat-label>
+							<input
+								matInput
+								[(ngModel)]="this.project.description"
+								placeholder="Descripción"
+							/>
+						</mat-form-field>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col">
+						Asignar empresa
+					</div>
+					<div class="col input-size">
+						<span *ngIf="!isEdit">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-select
+									placeholder="Empresa"
+									[(ngModel)]="this.project.company"
+									name="company"
+									(openChange)="myInput.focus()"
+								>
+									<input
+										class="searchInput"
+										matInput
+										focused="'true'"
+										type="text"
+										(keyup)="
+											searchCompany($event.target.value)
+										"
+										autocomplete="off"
+										placeholder="🔍 Buscar"
+									/>
+									<mat-divider></mat-divider>
+									<mat-option
+										*ngFor="
+											let company of companies;
+											let i = index
+										"
+										[value]="company"
+									>
+										<img
+											class="companyImage"
+											src="{{ logos[i] }}"
+											alt="company image"
+										/>
+
+										{{ company.name }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</span>
+						<span
+							*ngIf="isEdit && this.project.company !== undefined"
+						>
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-select
+									placeholder="{{
+										this.project.company.name
+									}}"
+									[(ngModel)]="this.project.company"
+									name="company"
+									(openChange)="myInput.focus()"
+								>
+									<input
+										class="searchInput"
+										matInput
+										focused="'true'"
+										type="text"
+										(keyup)="
+											searchCompany($event.target.value)
+										"
+										autocomplete="off"
+										placeholder="🔍 Buscar"
+									/>
+									<mat-divider></mat-divider>
+									<mat-option
+										*ngFor="
+											let company of companies;
+											let i = index
+										"
+										[value]="company"
+									>
+										<img
+											class="companyImage"
+											src="{{ logos[i] }}"
+											alt="company image"
+										/>
+
+										{{ company.name }}
+									</mat-option>
+								</mat-select>
+							</mat-form-field>
+						</span>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col">
+						Asignar linea de negocio
+					</div>
+					<div class="col ">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Linea de negocio"
+								[(ngModel)]="this.project.businessName"
+								name="businessName"
+								(openChange)="myInput.focus()"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="
+										searchBusiness($event.target.value)
+									"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<span *ngIf="this.project.company">
+									<mat-option
+										*ngFor="
+											let businessName of this.project
+												.company.businessLine;
+											let i = index
+										"
+										[value]="businessName.name"
+									>
+										{{ businessName.name }}</mat-option
+									>
+								</span>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col">
+						Asignar tipo de servicio
+					</div>
+					<div class="col ">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Tipo de servicio"
+								[(ngModel)]="this.project.serviceName"
+								name="serviceName"
+								(openChange)="myInput.focus()"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="searchService($event.target.value)"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<span *ngIf="this.project.company">
+									<mat-option
+										*ngFor="
+											let service of this.project.company
+												.services;
+											let i = index
+										"
+										[value]="service.name"
+									>
+										{{ service.name }}</mat-option
+									>
+								</span>
+							</mat-select>
+						</mat-form-field>
+					</div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col">
+						Asignar cliente
+					</div>
+					<div class="col">
+						<span
+							*ngIf="isEdit && this.project.client !== undefined"
+						>
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-select
+									placeholder="{{ this.project.client.name }}"
+									[(ngModel)]="this.project.client"
+									name="client"
+									(openChange)="myInput.focus()"
+								>
+									<input
+										class="searchInput"
+										matInput
+										focused="'true'"
+										type="text"
+										(keyup)="
+											searchClient($event.target.value)
+										"
+										autocomplete="off"
+										placeholder="🔍 Buscar"
+									/>
+									<mat-divider></mat-divider>
+									<mat-option
+										*ngFor="
+											let client of clients;
+											let i = index
+										"
+										[value]="client"
+									>
+										<img
+											class="companyImage"
+											src="{{ clientLogos[i] }}"
+											alt="client image"
+										/>
+
+										{{ client.name }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+						</span>
+
+						<span *ngIf="!isEdit">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-select
+									placeholder="Asignar cliente"
+									[(ngModel)]="this.project.client"
+									name="client"
+									(openChange)="myInput.focus()"
+								>
+									<input
+										class="searchInput"
+										matInput
+										focused="'true'"
+										type="text"
+										(keyup)="
+											searchClient($event.target.value)
+										"
+										autocomplete="off"
+										placeholder="🔍 Buscar"
+									/>
+									<mat-divider></mat-divider>
+									<mat-option
+										*ngFor="
+											let client of clients;
+											let i = index
+										"
+										[value]="client"
+									>
+										<img
+											class="companyImage"
+											src="{{ clientLogos[i] }}"
+											alt="client image"
+										/>
+
+										{{ client.name }}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+						</span>
+					</div>
+				</div>
+				<br />
+			</mat-tab>
+			<mat-tab label="Asignación de recursos">
+				<div class="row">
+					<div class="col-3">
+						<form class="example-form">
+							<mat-form-field
+								appearance="outline"
+								class="input-size"
+							>
+								<mat-select
+									placeholder="Colaborador"
+									[(ngModel)]="collaborator"
+									name="collaborator"
+									(openChange)="myInput.focus()"
+								>
+									<input
+										class="searchInput"
+										matInput
+										focused="'true'"
+										type="text"
+										(keyup)="
+											searchCollaborator(
+												$event.target.value
+											)
+										"
+										autocomplete="off"
+										placeholder="🔍 Buscar"
+									/>
+									<mat-divider></mat-divider>
+									<mat-option
+										*ngFor="
+											let collaborator of users;
+											let i = index
+										"
+										[value]="collaborator"
+									>
+										<img
+											class="companyImage"
+											src="{{ arrayImages[i] }}"
+											alt="collaborator_image"
+										/>
+
+										{{
+											collaborator.personalData.name
+										}}</mat-option
+									>
+								</mat-select>
+							</mat-form-field>
+						</form>
+					</div>
+
+					<div class="col-2">
+						<mat-form-field
+							appearance="outline"
+							style="max-width: 10em;"
+						>
+							<mat-select
+								placeholder="Asignar horas"
+								[(ngModel)]="typeHrs"
+							>
+								<mat-option value="totales">totales</mat-option>
+								<mat-option value="semanales"
+									>semanales</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+					<div class="col-2">
+						<mat-form-field
+							appearance="outline"
+							style="max-width: 10em; align-content: center;"
+						>
+							<mat-label>horas</mat-label>
+							<input
+								matInput
+								[(ngModel)]="hrs"
+								placeholder="0.0hrs"
+							/>
+						</mat-form-field>
+					</div>
+					<div class="col">
+						<mat-form-field appearance="outline" class="input-size">
+							<mat-select
+								placeholder="Rol"
+								[(ngModel)]="role"
+								name="role"
+								(openChange)="myInput.focus()"
+							>
+								<input
+									class="searchInput"
+									matInput
+									focused="'true'"
+									type="text"
+									(keyup)="searchRole($event.target.value)"
+									autocomplete="off"
+									placeholder="🔍 Buscar"
+								/>
+								<mat-divider></mat-divider>
+								<mat-option
+									*ngFor="let role of roles"
+									[value]="role"
+									>{{ role.name }}</mat-option
+								>
+							</mat-select>
+						</mat-form-field>
+					</div>
+					<div class="col btn-space">
+						<button
+							type="button"
+							class="btn btn-outline-primary width-btn"
+							(click)="addCollaborator()"
+						>
+							<a>Agregar</a>
+						</button>
+					</div>
+				</div>
+				<table class="table">
+					<thead>
+						<tr>
+							<th scope="col">Colaborador</th>
+							<th scope="col">Rol</th>
+							<th scope="col">Horas</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr
+							*ngFor="
+								let projectTable of this.project.resources;
+								let i = index
+							"
+						>
+							<td>{{ projectTable.name.personalData.name }}</td>
+							<td>{{ projectTable.role.name }}</td>
+							<td>{{ projectTable.hrs }}</td>
+
+							<td>
+								<div class="row">
+									<div class="col">
+										<i
+											class="far fa-trash-alt icon-color"
+											(click)="deleteBussinesLine(i)"
+										></i>
+									</div>
+								</div>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</mat-tab>
+		</mat-tab-group>
+	</mat-card>
+</div>
+>

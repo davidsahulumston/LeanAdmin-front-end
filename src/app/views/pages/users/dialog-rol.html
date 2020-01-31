@@ -1,0 +1,35 @@
+<div class="row">
+	<div class="col">
+		<div mat-dialog-content>
+			<p>Nuevo rol</p>
+			<mat-form-field style="width: 500px;">
+				<input matInput [(ngModel)]="data.name" />
+			</mat-form-field>
+			<div class="row">
+				<div class="col" style="display: flex; align-items: center; ">
+					<p>Costo por hora</p>
+				</div>
+				<div class="col">
+					<mat-form-field appearance="outline">
+						<input type="currency" matInput [(ngModel)]="data.costHour" placeholder="$20,000" />
+					</mat-form-field>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div
+	mat-dialog-actions
+	style="display: flex!important;justify-content: space-evenly;"
+>
+	<div>
+		<button type="button" class="btn btn-dark" (click)="onNoClick()">
+			Cancelar
+		</button>
+	</div>
+	<div>
+		<button type="button" (click)="addRol()" class="btn btn-primary">
+			Agregar rol
+		</button>
+	</div>
+</div>

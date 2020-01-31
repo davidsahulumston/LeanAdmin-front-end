@@ -1,0 +1,56 @@
+.input-size {
+	width: 100%;
+}
+.add-btn {
+	display: flex;
+	justify-content: flex-end;
+}
+
+.searchInput {
+	height: 4em;
+	padding-left: 1.5em;
+}
+
+.hide {
+	display: none;
+}
+
+.user-image {
+	width: 30px !important;
+	height: 30px !important;
+	border-radius: 50%;
+}
+
+.input-date {
+    width: 70%!important;
+}
+
+input[type="file"] {
+    display: none;
+}
+.custom-file-upload {
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background-color:	#6020DE;
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+}
+
+.fileText {
+	color: white;
+	font-weight: 300;
+}
+
+.fileName {
+	border-radius: 5px;
+	border: 1px solid #ccc;
+	background-color:	#ccc;
+    display: inline-block;
+    padding: 6px 12px;
+}
+
+.endLine {
+	display: flex;
+	justify-content: flex-end;
+}
